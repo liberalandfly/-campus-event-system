@@ -1,0 +1,619 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>校园活动管理系统</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.8/dist/chart.umd.min.js"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#3B82F6',
+                        secondary: '#10B981',
+                        accent: '#6366F1',
+                        neutral: '#64748B',
+                        light: '#F8FAFC',
+                        dark: '#1E293B'
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'system-ui', 'sans-serif'],
+                    },
+                }
+            }
+        }
+    </script>
+    <style type="text/tailwindcss">
+        @layer utilities {
+            .content-auto {
+                content-visibility: auto;
+            }
+            .card-shadow {
+                box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+            }
+            .drag-handle {
+                cursor: move;
+            }
+            .lowcode-component {
+                transition: all 0.2s ease;
+            }
+            .lowcode-component:hover {
+                transform: translateY(-2px);
+                box-shadow: 0 6px 16px rgba(0, 0, 0, 0.08);
+            }
+        }
+    </style>
+</head>
+<body class="bg-gray-50 text-dark">
+    <!-- 顶部导航栏 -->
+    <header class="bg-white shadow-sm fixed top-0 left-0 right-0 z-50">
+        <div class="container mx-auto px-4">
+            <div class="flex items-center justify-between h-16">
+                <div class="flex items-center">
+                    <div class="flex-shrink-0 flex items-center">
+                        <i class="fa fa-calendar-check-o text-primary text-2xl mr-2"></i>
+                        <span class="font-bold text-xl">校园活动管理系统</span>
+                    </div>
+                    <nav class="hidden md:ml-10 md:flex md:space-x-8">
+                        <a href="#" class="text-primary border-b-2 border-primary px-1 pt-1 font-medium">首页</a>
+                        <a href="#" class="text-neutral hover:text-primary px-1 pt-1 font-medium transition-colors">活动管理</a>
+                        <a href="#" class="text-neutral hover:text-primary px-1 pt-1 font-medium transition-colors">报名统计</a>
+                        <a href="#" class="text-neutral hover:text-primary px-1 pt-1 font-medium transition-colors">系统设置</a>
+                    </nav>
+                </div>
+                <div class="flex items-center">
+                    <button class="p-2 rounded-full text-neutral hover:bg-gray-100 transition-colors">
+                        <i class="fa fa-bell-o"></i>
+                    </button>
+                    <div class="ml-3 relative">
+                        <div class="flex items-center">
+                            <img class="h-8 w-8 rounded-full object-cover" src="https://picsum.photos/id/237/200/200" alt="用户头像">
+                            <span class="ml-2 text-sm font-medium hidden md:block">学生会管理员</span>
+                            <i class="fa fa-chevron-down ml-1 text-xs text-neutral"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- 主内容区 -->
+    <main class="container mx-auto px-4 pt-24 pb-16">
+        <!-- 低代码平台提示条 -->
+        <div class="bg-blue-50 border-l-4 border-primary p-4 mb-6 rounded">
+            <div class="flex">
+                <div class="flex-shrink-0">
+                    <i class="fa fa-lightbulb-o text-primary"></i>
+                </div>
+                <div class="ml-3">
+                    <p class="text-sm text-blue-700">
+                        此系统基于低代码平台构建，支持拖拽组件快速定制功能模块，无需复杂编程即可完成系统搭建。
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- 统计概览 -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+            <div class="bg-white rounded-lg p-6 card-shadow lowcode-component">
+                <div class="flex items-center">
+                    <div class="p-3 rounded-full bg-blue-100 text-primary">
+                        <i class="fa fa-calendar text-xl"></i>
+                    </div>
+                    <div class="ml-4">
+                        <p class="text-sm text-neutral">当前活动</p>
+                        <h3 class="text-2xl font-bold">24</h3>
+                    </div>
+                </div>
+                <div class="mt-4 text-sm text-green-600">
+                    <i class="fa fa-arrow-up"></i> 较上周增长 12%
+                </div>
+            </div>
+
+            <div class="bg-white rounded-lg p-6 card-shadow lowcode-component">
+                <div class="flex items-center">
+                    <div class="p-3 rounded-full bg-green-100 text-secondary">
+                        <i class="fa fa-users text-xl"></i>
+                    </div>
+                    <div class="ml-4">
+                        <p class="text-sm text-neutral">总报名人数</p>
+                        <h3 class="text-2xl font-bold">1,586</h3>
+                    </div>
+                </div>
+                <div class="mt-4 text-sm text-green-600">
+                    <i class="fa fa-arrow-up"></i> 较上周增长 8%
+                </div>
+            </div>
+
+            <div class="bg-white rounded-lg p-6 card-shadow lowcode-component">
+                <div class="flex items-center">
+                    <div class="p-3 rounded-full bg-purple-100 text-accent">
+                        <i class="fa fa-building-o text-xl"></i>
+                    </div>
+                    <div class="ml-4">
+                        <p class="text-sm text-neutral">参与社团</p>
+                        <h3 class="text-2xl font-bold">18</h3>
+                    </div>
+                </div>
+                <div class="mt-4 text-sm text-neutral">
+                    <i class="fa fa-minus"></i> 与上周持平
+                </div>
+            </div>
+
+            <div class="bg-white rounded-lg p-6 card-shadow lowcode-component">
+                <div class="flex items-center">
+                    <div class="p-3 rounded-full bg-yellow-100 text-yellow-600">
+                        <i class="fa fa-line-chart text-xl"></i>
+                    </div>
+                    <div class="ml-4">
+                        <p class="text-sm text-neutral">活动完成率</p>
+                        <h3 class="text-2xl font-bold">92%</h3>
+                    </div>
+                </div>
+                <div class="mt-4 text-sm text-green-600">
+                    <i class="fa fa-arrow-up"></i> 较上周增长 3%
+                </div>
+            </div>
+        </div>
+
+        <!-- 主要内容区 -->
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            <!-- 左侧：活动列表 -->
+            <div class="lg:col-span-2">
+                <div class="bg-white rounded-lg shadow-sm p-6 mb-8">
+                    <div class="flex justify-between items-center mb-6">
+                        <h2 class="text-lg font-bold">近期活动</h2>
+                        <button class="bg-primary hover:bg-primary/90 text-white px-4 py-2 rounded-md text-sm font-medium transition-colors flex items-center">
+                            <i class="fa fa-plus mr-2"></i> 发布新活动
+                        </button>
+                    </div>
+
+                    <!-- 活动列表 -->
+                    <div class="space-y-4">
+                        <!-- 活动项 1 -->
+                        <div class="border border-gray-100 rounded-lg p-4 hover:border-primary/30 transition-colors lowcode-component">
+                            <div class="flex justify-between">
+                                <div>
+                                    <span class="bg-blue-100 text-primary text-xs px-2 py-1 rounded-full">校级活动</span>
+                                    <h3 class="font-medium mt-2">第15届校园科技文化节</h3>
+                                    <p class="text-sm text-neutral mt-1">主办单位：校学生会</p>
+                                </div>
+                                <div class="text-right">
+                                    <p class="text-sm font-medium">2023-10-25</p>
+                                    <p class="text-xs text-neutral">报名截止：10-20</p>
+                                </div>
+                            </div>
+                            <div class="flex justify-between items-center mt-4">
+                                <div class="flex items-center text-sm">
+                                    <span class="flex items-center mr-4">
+                                        <i class="fa fa-map-marker text-neutral mr-1"></i> 大礼堂
+                                    </span>
+                                    <span class="flex items-center">
+                                        <i class="fa fa-users text-neutral mr-1"></i> 已报名: 328/500
+                                    </span>
+                                </div>
+                                <div class="flex space-x-2">
+                                    <button class="text-primary hover:text-primary/80 text-sm transition-colors">
+                                        <i class="fa fa-edit mr-1"></i> 编辑
+                                    </button>
+                                    <button class="text-neutral hover:text-neutral/80 text-sm transition-colors">
+                                        <i class="fa fa-bar-chart mr-1"></i> 统计
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 活动项 2 -->
+                        <div class="border border-gray-100 rounded-lg p-4 hover:border-primary/30 transition-colors lowcode-component">
+                            <div class="flex justify-between">
+                                <div>
+                                    <span class="bg-green-100 text-secondary text-xs px-2 py-1 rounded-full">社团活动</span>
+                                    <h3 class="font-medium mt-2">编程大赛初赛</h3>
+                                    <p class="text-sm text-neutral mt-1">主办单位：计算机协会</p>
+                                </div>
+                                <div class="text-right">
+                                    <p class="text-sm font-medium">2023-10-28</p>
+                                    <p class="text-xs text-neutral">报名截止：10-26</p>
+                                </div>
+                            </div>
+                            <div class="flex justify-between items-center mt-4">
+                                <div class="flex items-center text-sm">
+                                    <span class="flex items-center mr-4">
+                                        <i class="fa fa-map-marker text-neutral mr-1"></i> 计算机楼201
+                                    </span>
+                                    <span class="flex items-center">
+                                        <i class="fa fa-users text-neutral mr-1"></i> 已报名: 156/200
+                                    </span>
+                                </div>
+                                <div class="flex space-x-2">
+                                    <button class="text-primary hover:text-primary/80 text-sm transition-colors">
+                                        <i class="fa fa-edit mr-1"></i> 编辑
+                                    </button>
+                                    <button class="text-neutral hover:text-neutral/80 text-sm transition-colors">
+                                        <i class="fa fa-bar-chart mr-1"></i> 统计
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 活动项 3 -->
+                        <div class="border border-gray-100 rounded-lg p-4 hover:border-primary/30 transition-colors lowcode-component">
+                            <div class="flex justify-between">
+                                <div>
+                                    <span class="bg-purple-100 text-accent text-xs px-2 py-1 rounded-full">院系活动</span>
+                                    <h3 class="font-medium mt-2">秋季运动会</h3>
+                                    <p class="text-sm text-neutral mt-1">主办单位：体育学院</p>
+                                </div>
+                                <div class="text-right">
+                                    <p class="text-sm font-medium">2023-11-05</p>
+                                    <p class="text-xs text-neutral">报名截止：11-01</p>
+                                </div>
+                            </div>
+                            <div class="flex justify-between items-center mt-4">
+                                <div class="flex items-center text-sm">
+                                    <span class="flex items-center mr-4">
+                                        <i class="fa fa-map-marker text-neutral mr-1"></i> 田径场
+                                    </span>
+                                    <span class="flex items-center">
+                                        <i class="fa fa-users text-neutral mr-1"></i> 已报名: 423/800
+                                    </span>
+                                </div>
+                                <div class="flex space-x-2">
+                                    <button class="text-primary hover:text-primary/80 text-sm transition-colors">
+                                        <i class="fa fa-edit mr-1"></i> 编辑
+                                    </button>
+                                    <button class="text-neutral hover:text-neutral/80 text-sm transition-colors">
+                                        <i class="fa fa-bar-chart mr-1"></i> 统计
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mt-6 text-center">
+                        <button class="text-primary hover:text-primary/80 text-sm font-medium transition-colors">
+                            查看全部活动 <i class="fa fa-angle-right ml-1"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- 活动报名管理 -->
+                <div class="bg-white rounded-lg shadow-sm p-6">
+                    <div class="flex justify-between items-center mb-6">
+                        <h2 class="text-lg font-bold">报名管理</h2>
+                        <div class="relative">
+                            <input type="text" placeholder="搜索活动名称..." class="pl-8 pr-4 py-2 border border-gray-200 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary">
+                            <i class="fa fa-search absolute left-3 top-1/2 transform -translate-y-1/2 text-neutral"></i>
+                        </div>
+                    </div>
+
+                    <!-- 报名列表 -->
+                    <div class="overflow-x-auto">
+                        <table class="min-w-full divide-y divide-gray-200">
+                            <thead>
+                                <tr>
+                                    <th class="px-4 py-3 bg-gray-50 text-left text-xs font-medium text-neutral uppercase tracking-wider">活动名称</th>
+                                    <th class="px-4 py-3 bg-gray-50 text-left text-xs font-medium text-neutral uppercase tracking-wider">报名人</th>
+                                    <th class="px-4 py-3 bg-gray-50 text-left text-xs font-medium text-neutral uppercase tracking-wider">学院</th>
+                                    <th class="px-4 py-3 bg-gray-50 text-left text-xs font-medium text-neutral uppercase tracking-wider">报名时间</th>
+                                    <th class="px-4 py-3 bg-gray-50 text-left text-xs font-medium text-neutral uppercase tracking-wider">状态</th>
+                                    <th class="px-4 py-3 bg-gray-50 text-right text-xs font-medium text-neutral uppercase tracking-wider">操作</th>
+                                </tr>
+                            </thead>
+                            <tbody class="bg-white divide-y divide-gray-200">
+                                <tr>
+                                    <td class="px-4 py-3 whitespace-nowrap">
+                                        <div class="text-sm font-medium">第15届校园科技文化节</div>
+                                    </td>
+                                    <td class="px-4 py-3 whitespace-nowrap">
+                                        <div class="text-sm">张三</div>
+                                    </td>
+                                    <td class="px-4 py-3 whitespace-nowrap">
+                                        <div class="text-sm">计算机学院</div>
+                                    </td>
+                                    <td class="px-4 py-3 whitespace-nowrap">
+                                        <div class="text-sm">2023-10-15</div>
+                                    </td>
+                                    <td class="px-4 py-3 whitespace-nowrap">
+                                        <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
+                                            已确认
+                                        </span>
+                                    </td>
+                                    <td class="px-4 py-3 whitespace-nowrap text-right text-sm font-medium">
+                                        <button class="text-primary hover:text-primary/80 mr-3">详情</button>
+                                        <button class="text-red-500 hover:text-red-700">取消</button>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="px-4 py-3 whitespace-nowrap">
+                                        <div class="text-sm font-medium">编程大赛初赛</div>
+                                    </td>
+                                    <td class="px-4 py-3 whitespace-nowrap">
+                                        <div class="text-sm">李四</div>
+                                    </td>
+                                    <td class="px-4 py-3 whitespace-nowrap">
+                                        <div class="text-sm">电子信息学院</div>
+                                    </td>
+                                    <td class="px-4 py-3 whitespace-nowrap">
+                                        <div class="text-sm">2023-10-16</div>
+                                    </td>
+                                    <td class="px-4 py-3 whitespace-nowrap">
+                                        <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
+                                            已确认
+                                        </span>
+                                    </td>
+                                    <td class="px-4 py-3 whitespace-nowrap text-right text-sm font-medium">
+                                        <button class="text-primary hover:text-primary/80 mr-3">详情</button>
+                                        <button class="text-red-500 hover:text-red-700">取消</button>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="px-4 py-3 whitespace-nowrap">
+                                        <div class="text-sm font-medium">秋季运动会</div>
+                                    </td>
+                                    <td class="px-4 py-3 whitespace-nowrap">
+                                        <div class="text-sm">王五</div>
+                                    </td>
+                                    <td class="px-4 py-3 whitespace-nowrap">
+                                        <div class="text-sm">体育学院</div>
+                                    </td>
+                                    <td class="px-4 py-3 whitespace-nowrap">
+                                        <div class="text-sm">2023-10-17</div>
+                                    </td>
+                                    <td class="px-4 py-3 whitespace-nowrap">
+                                        <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-yellow-100 text-yellow-800">
+                                            待审核
+                                        </span>
+                                    </td>
+                                    <td class="px-4 py-3 whitespace-nowrap text-right text-sm font-medium">
+                                        <button class="text-primary hover:text-primary/80 mr-3">详情</button>
+                                        <button class="text-red-500 hover:text-red-700">取消</button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="mt-6 flex justify-between items-center">
+                        <p class="text-sm text-neutral">显示 1 至 3 条，共 156 条</p>
+                        <div class="flex space-x-1">
+                            <button class="w-8 h-8 flex items-center justify-center rounded border border-gray-200 text-neutral hover:border-primary hover:text-primary transition-colors">
+                                <i class="fa fa-angle-left"></i>
+                            </button>
+                            <button class="w-8 h-8 flex items-center justify-center rounded bg-primary text-white">1</button>
+                            <button class="w-8 h-8 flex items-center justify-center rounded border border-gray-200 hover:border-primary hover:text-primary transition-colors">2</button>
+                            <button class="w-8 h-8 flex items-center justify-center rounded border border-gray-200 hover:border-primary hover:text-primary transition-colors">3</button>
+                            <button class="w-8 h-8 flex items-center justify-center rounded border border-gray-200 text-neutral hover:border-primary hover:text-primary transition-colors">
+                                <i class="fa fa-angle-right"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 右侧：数据统计和低代码组件 -->
+            <div>
+                <!-- 数据统计图表 -->
+                <div class="bg-white rounded-lg shadow-sm p-6 mb-8">
+                    <h2 class="text-lg font-bold mb-6">活动参与数据</h2>
+                    <div class="h-64">
+                        <canvas id="eventChart"></canvas>
+                    </div>
+                    <div class="grid grid-cols-2 gap-4 mt-6">
+                        <div class="p-4 bg-gray-50 rounded-lg">
+                            <p class="text-sm text-neutral">活动类型占比</p>
+                            <div class="h-40 mt-2">
+                                <canvas id="typeChart"></canvas>
+                            </div>
+                        </div>
+                        <div class="p-4 bg-gray-50 rounded-lg">
+                            <p class="text-sm text-neutral">报名转化率</p>
+                            <div class="h-40 mt-2">
+                                <canvas id="conversionChart"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 低代码组件库 -->
+                <div class="bg-white rounded-lg shadow-sm p-6 mb-8">
+                    <h2 class="text-lg font-bold mb-4">低代码组件库</h2>
+                    <p class="text-sm text-neutral mb-4">拖拽组件到页面即可快速添加功能</p>
+                    
+                    <div class="grid grid-cols-2 gap-3">
+                        <div class="border border-gray-200 rounded p-3 text-center cursor-move hover:border-primary transition-colors lowcode-component drag-handle">
+                            <i class="fa fa-list-alt text-primary text-xl mb-2"></i>
+                            <p class="text-xs">活动列表</p>
+                        </div>
+                        <div class="border border-gray-200 rounded p-3 text-center cursor-move hover:border-primary transition-colors lowcode-component drag-handle">
+                            <i class="fa fa-file-text-o text-primary text-xl mb-2"></i>
+                            <p class="text-xs">报名表单</p>
+                        </div>
+                        <div class="border border-gray-200 rounded p-3 text-center cursor-move hover:border-primary transition-colors lowcode-component drag-handle">
+                            <i class="fa fa-bar-chart text-primary text-xl mb-2"></i>
+                            <p class="text-xs">数据报表</p>
+                        </div>
+                        <div class="border border-gray-200 rounded p-3 text-center cursor-move hover:border-primary transition-colors lowcode-component drag-handle">
+                            <i class="fa fa-calendar-o text-primary text-xl mb-2"></i>
+                            <p class="text-xs">日历视图</p>
+                        </div>
+                        <div class="border border-gray-200 rounded p-3 text-center cursor-move hover:border-primary transition-colors lowcode-component drag-handle">
+                            <i class="fa fa-comments-o text-primary text-xl mb-2"></i>
+                            <p class="text-xs">评论组件</p>
+                        </div>
+                        <div class="border border-gray-200 rounded p-3 text-center cursor-move hover:border-primary transition-colors lowcode-component drag-handle">
+                            <i class="fa fa-map-marker text-primary text-xl mb-2"></i>
+                            <p class="text-xs">地点选择</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 快速操作 -->
+                <div class="bg-white rounded-lg shadow-sm p-6">
+                    <h2 class="text-lg font-bold mb-4">快速操作</h2>
+                    <div class="space-y-3">
+                        <button class="w-full flex items-center justify-between p-3 border border-gray-200 rounded-lg hover:border-primary hover:bg-blue-50 transition-colors">
+                            <div class="flex items-center">
+                                <i class="fa fa-file-excel-o text-green-600 mr-3"></i>
+                                <span>导出报名数据</span>
+                            </div>
+                            <i class="fa fa-angle-right text-neutral"></i>
+                        </button>
+                        <button class="w-full flex items-center justify-between p-3 border border-gray-200 rounded-lg hover:border-primary hover:bg-blue-50 transition-colors">
+                            <div class="flex items-center">
+                                <i class="fa fa-bell-o text-orange-500 mr-3"></i>
+                                <span>发送活动提醒</span>
+                            </div>
+                            <i class="fa fa-angle-right text-neutral"></i>
+                        </button>
+                        <button class="w-full flex items-center justify-between p-3 border border-gray-200 rounded-lg hover:border-primary hover:bg-blue-50 transition-colors">
+                            <div class="flex items-center">
+                                <i class="fa fa-cog text-neutral mr-3"></i>
+                                <span>系统设置</span>
+                            </div>
+                            <i class="fa fa-angle-right text-neutral"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- 页脚 -->
+    <footer class="bg-white border-t border-gray-200">
+        <div class="container mx-auto px-4 py-6">
+            <div class="flex flex-col md:flex-row justify-between items-center">
+                <p class="text-sm text-neutral">© 2023 校园活动管理系统 - 基于低代码平台构建</p>
+                <div class="flex space-x-6 mt-4 md:mt-0">
+                    <a href="#" class="text-sm text-neutral hover:text-primary transition-colors">帮助中心</a>
+                    <a href="#" class="text-sm text-neutral hover:text-primary transition-colors">联系我们</a>
+                    <a href="#" class="text-sm text-neutral hover:text-primary transition-colors">隐私政策</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // 初始化图表
+        document.addEventListener('DOMContentLoaded', function() {
+            // 活动参与数据图表
+            const eventCtx = document.getElementById('eventChart').getContext('2d');
+            new Chart(eventCtx, {
+                type: 'line',
+                data: {
+                    labels: ['6月', '7月', '8月', '9月', '10月', '11月'],
+                    datasets: [{
+                        label: '活动数量',
+                        data: [8, 12, 15, 18, 24, 28],
+                        borderColor: '#3B82F6',
+                        backgroundColor: 'rgba(59, 130, 246, 0.1)',
+                        tension: 0.3,
+                        fill: true
+                    }, {
+                        label: '参与人数',
+                        data: [320, 580, 750, 920, 1250, 1580],
+                        borderColor: '#10B981',
+                        backgroundColor: 'rgba(16, 185, 129, 0.1)',
+                        tension: 0.3,
+                        fill: true
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'top',
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
+                    }
+                }
+            });
+
+            // 活动类型占比图表
+            const typeCtx = document.getElementById('typeChart').getContext('2d');
+            new Chart(typeCtx, {
+                type: 'doughnut',
+                data: {
+                    labels: ['校级活动', '社团活动', '院系活动'],
+                    datasets: [{
+                        data: [35, 45, 20],
+                        backgroundColor: [
+                            '#3B82F6',
+                            '#10B981',
+                            '#6366F1'
+                        ]
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'bottom',
+                            labels: {
+                                boxWidth: 12,
+                                font: {
+                                    size: 10
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+
+            // 报名转化率图表
+            const conversionCtx = document.getElementById('conversionChart').getContext('2d');
+            new Chart(conversionCtx, {
+                type: 'bar',
+                data: {
+                    labels: ['科技类', '文艺类', '体育类'],
+                    datasets: [{
+                        label: '转化率',
+                        data: [78, 92, 85],
+                        backgroundColor: '#F59E0B'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: false
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            max: 100,
+                            ticks: {
+                                callback: function(value) {
+                                    return value + '%';
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+
+            // 模拟拖拽效果
+            const draggableElements = document.querySelectorAll('.drag-handle');
+            draggableElements.forEach(el => {
+                el.addEventListener('mousedown', function() {
+                    this.classList.add('scale-105', 'border-primary', 'bg-blue-50');
+                });
+                document.addEventListener('mouseup', function() {
+                    el.classList.remove('scale-105', 'border-primary', 'bg-blue-50');
+                });
+            });
+        });
+    </script>
+</body>
+</html>
